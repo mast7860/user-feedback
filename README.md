@@ -42,6 +42,16 @@ The service can be built using the following command:
 Running the service locally is done using the following command:
 
 ```
+goto doker-user-feedback folder and run "docker compose up" to start local stack
+
+then go  to terraform-user-feedback folder and run terrform
+
+terraform init ( first time)
+
+terraform apply ( create resources)
+```
+
+```
 ./gradlew run -Dmicronaut.environments=local
 ```
 or
@@ -73,6 +83,12 @@ Upgrade gradle version
 ./gradlew wrapper --gradle-version={versionNumber}
 ```
 
+## TODO:
+- User mapstruct to remove emailId from response to list
+- Add filters in list operation with date , score
+- Improve the html template in email
+- convert email endpoint to scheduler to send email weekly
+- Unit tests
 ## Micronaut 3.2.7 Documentation
 
 - [User Guide](https://docs.micronaut.io/3.2.7/guide/index.html)
