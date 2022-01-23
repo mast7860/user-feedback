@@ -59,6 +59,10 @@ sqs:
     threads: ${SQS_LISTENER_THREADS:`1-5`}
 
 ---
+slack:
+  endpoint: ${SLACK_WEBHOOK_URL:`https://hooks.slack.com/services/XXXX/XXXX/XXXX`}
+
+---
 jackson:
   serialization:
     writeDatesAsTimestamps: false

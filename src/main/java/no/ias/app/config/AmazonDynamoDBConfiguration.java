@@ -4,7 +4,8 @@ import com.amazonaws.ClientConfiguration;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
@@ -21,24 +22,30 @@ public class AmazonDynamoDBConfiguration {
     protected String serviceEndpoint;
 
     @Bean
+    public DynamoDBMapper dynamoDBMapper(AmazonDynamoDB dynamoDBClient) {
+        DynamoDBMapperConfig dynamoDBMapperConfig = DynamoDBMapperConfig.builder().build();
+        DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(dynamoDBClient, dynamoDBMapperConfig);
+        log.info("Created DynamoDBMapper {} with client {}", dynamoDBMapper, dynamoDBClient);
+        return dynamoDBMapper;
+    }
+
+    @Bean
     @Requires(notEnv = "local")
-    public DynamoDB dynamoDB() {
+    public AmazonDynamoDB dynamoDB() {
         log.info("Creating default DynamoDB client in region={}", awsRegion);
-        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
+        return AmazonDynamoDBClientBuilder.standard()
                 .withRegion(awsRegion)
                 .build();
-        return new DynamoDB(client);
     }
 
     @Bean
     @Requires(env = "local")
-    public DynamoDB localDynamoDB() {
+    public AmazonDynamoDB localDynamoDB() {
         log.info("Creating local DynamoDB client");
-        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
+        return AmazonDynamoDBClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder
                         .EndpointConfiguration(serviceEndpoint, awsRegion))
                 .withClientConfiguration(new ClientConfiguration())
                 .build();
-        return new DynamoDB(client);
     }
 }

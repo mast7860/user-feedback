@@ -1,5 +1,7 @@
 package no.ias.app.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.slack.api.webhook.Payload;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.jms.annotations.JMSListener;
 import io.micronaut.jms.annotations.Queue;
@@ -13,11 +15,19 @@ import static io.micronaut.jms.sqs.configuration.SqsConfiguration.CONNECTION_FAC
 @Requires(notEnv = "test")
 public class SqsListenerService {
 
+    private final SlackService slackService;
+
+    public SqsListenerService(SlackService slackService) {
+        this.slackService = slackService;
+    }
+
     @Queue(value = "${sqs.queue.name}", concurrency = "${sqs.queue.threads}")
     public void receiveMessage(@MessageBody String message) {
-        log.debug("message received {}", message);
+        log.info("message received {}", message);
         try {
-            log.debug("message processed {}", message);
+            var payload = Payload.builder().text(message).build();
+            slackService.sendSlackMessage(payload).getBody();
+            log.info("message processed {}", message);
         } catch (Exception exception) {
             log.error("Error processing SqsMessage with error={}", exception.getMessage());
         }

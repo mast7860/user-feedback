@@ -9,8 +9,6 @@ import io.micronaut.http.annotation.Header;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
@@ -21,11 +19,12 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import java.io.IOException;
 import java.util.UUID;
 
 @Controller(value = "/v1")
 @Slf4j
-@Introspected(classes = {FeedbackRequest.class,UUID.class})
+@Introspected(classes = {FeedbackRequest.class, UUID.class})
 @Validated
 public class UserFeedbackResource {
 
@@ -36,18 +35,15 @@ public class UserFeedbackResource {
         this.userFeedbackService = userFeedbackService;
     }
 
-
     @Post(consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @Operation(summary = "save customer feedback",
             description = "Save and process feedback shared by customer")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     @Tag(name = "Feedback")
-    public Mono<HttpResponse<FeedbackRequest>> saveCustomerFeedback(@NotEmpty @Valid @Body FeedbackRequest feedbackRequest,
-                                                  @Header UUID traceId){
+    public Mono<HttpResponse<String>> saveCustomerFeedback(@NotEmpty @Valid @Body FeedbackRequest feedbackRequest,
+                                                           @Header UUID traceId) {
         log.info("request received for traceId={}", traceId);
 
-        userFeedbackService.saveCustomerFeedback(feedbackRequest,traceId);
-
-        return  Mono.just(HttpResponse.ok(feedbackRequest));
+        return Mono.just(HttpResponse.ok(userFeedbackService.saveCustomerFeedback(feedbackRequest)));
     }
 }

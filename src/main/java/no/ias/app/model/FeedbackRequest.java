@@ -13,18 +13,16 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Schema(description="Customer Feedback",name = "Feedback")
+@Schema(description = "Customer Feedback", name = "Feedback")
 public class FeedbackRequest {
 
     String feedback;
 
-    String score;
+    int score;
 
     String firstName;
 
     String lastName;
 
     String emailId;
-
-    boolean termsAndConditions;
 }

@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 public class LocalDateTimeConverter implements DynamoDBTypeConverter<String, LocalDateTime> {
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public String convert(LocalDateTime object) {

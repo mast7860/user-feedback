@@ -3,17 +3,31 @@ package no.ias.app.service;
 import jakarta.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import no.ias.app.model.FeedbackRequest;
-
-import java.util.UUID;
+import no.ias.app.repository.UserFeedbackRepository;
 
 @Slf4j
 @Singleton
 public class UserFeedbackService {
 
+    private final UserFeedbackRepository userFeedbackRepository;
 
-    public void saveCustomerFeedback(FeedbackRequest feedbackRequest,
-                                     UUID traceId){
+    private final SqsSenderService sqsSenderService;
 
-    log.info("request processed for traceId={}", traceId);
+
+    public UserFeedbackService(UserFeedbackRepository userFeedbackRepository, SqsSenderService sqsSenderService) {
+        this.userFeedbackRepository = userFeedbackRepository;
+        this.sqsSenderService = sqsSenderService;
+    }
+
+    public String saveCustomerFeedback(FeedbackRequest feedbackRequest) {
+
+        userFeedbackRepository.saveFeedback(feedbackRequest);
+
+        var formattedMessage = "feedback= %s & rating= %s".formatted(feedbackRequest.getFeedback(), feedbackRequest.getScore());
+
+        sqsSenderService.send(formattedMessage);
+
+        return "success";
+
     }
 }

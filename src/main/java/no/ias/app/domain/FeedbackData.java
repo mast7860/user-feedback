@@ -35,9 +35,9 @@ public class FeedbackData {
     private String firstName;
 
     @DynamoDBAttribute(attributeName = "lastName")
-    private LocalDateTime lastName;
+    private String lastName;
 
-    @DynamoDBAttribute(attributeName = "consent")
-    private boolean consent;
+    @DynamoDBAttribute(attributeName = "feedback")
+    private String feedback;
 
 }

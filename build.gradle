@@ -23,11 +23,11 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     annotationProcessor("io.micronaut:micronaut-http-validation")
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    implementation("io.micronaut:micronaut-inject-java")
 
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut:micronaut-runtime")
-    implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
     implementation("io.micronaut.aws:micronaut-aws-parameter-store")
     implementation("io.micronaut.jms:micronaut-jms-sqs")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
@@ -37,12 +37,12 @@ dependencies {
     implementation("io.swagger.core.v3:swagger-annotations")
     implementation("jakarta.annotation:jakarta.annotation-api")
     implementation("io.micronaut:micronaut-validation")
-
+    implementation 'com.slack.api:bolt:1.17.0'
     implementation "com.amazonaws:aws-java-sdk-ses"
     implementation("com.amazonaws:aws-java-sdk-dynamodb")
 
     compileOnly("org.projectlombok:lombok")
-    runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly('ch.qos.logback:logback-classic:1.2.10')
 
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.mockito:mockito-core")
