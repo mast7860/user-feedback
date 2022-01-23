@@ -2,8 +2,11 @@ package no.ias.app.service;
 
 import jakarta.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
+import no.ias.app.domain.FeedbackData;
 import no.ias.app.model.FeedbackRequest;
 import no.ias.app.repository.UserFeedbackRepository;
+
+import java.util.List;
 
 @Slf4j
 @Singleton
@@ -28,6 +31,10 @@ public class UserFeedbackService {
         sqsSenderService.send(formattedMessage);
 
         return "success";
+    }
 
+    public List<FeedbackData> getCustomerFeedback() {
+
+        return userFeedbackRepository.getAllFeedBack();
     }
 }

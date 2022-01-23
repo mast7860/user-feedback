@@ -5,6 +5,7 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Header;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.validation.Validated;
@@ -13,13 +14,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import no.ias.app.domain.FeedbackData;
 import no.ias.app.model.FeedbackRequest;
 import no.ias.app.service.UserFeedbackService;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
-import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Controller(value = "/v1")
@@ -45,5 +47,16 @@ public class UserFeedbackResource {
         log.info("request received for traceId={}", traceId);
 
         return Mono.just(HttpResponse.ok(userFeedbackService.saveCustomerFeedback(feedbackRequest)));
+    }
+
+    @Get(produces = MediaType.APPLICATION_JSON)
+    @Operation(summary = "get customer feedback",
+            description = "process request and email feedback stats")
+    @ApiResponse(responseCode = "500", description = "Internal server error")
+    @Tag(name = "Feedback")
+    public Mono<HttpResponse<List<FeedbackData>>> getCustomerFeedbackStats(@Header UUID traceId) {
+        log.info("request received for traceId={}", traceId);
+
+        return Mono.just(HttpResponse.ok(userFeedbackService.getCustomerFeedback()));
     }
 }
