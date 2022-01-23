@@ -23,6 +23,17 @@ resource "aws_sqs_queue" "feedback_queue" {
   visibility_timeout_seconds = 60
 }
 
+# Create SES
+
+resource "aws_ses_email_identity" "from_email" {
+  email = "john.doe.one@unknown.com"
+}
+
+resource "aws_ses_email_identity" "to_email" {
+  email = "john.doe.two@unknown.com"
+}
+
+
 # Create dynamo db table
 
 resource "aws_dynamodb_table" "feedback_table" {

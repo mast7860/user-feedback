@@ -30,15 +30,16 @@ public class EmailService {
         this.emailConfig = emailConfig;
     }
 
-    public void sendEmail(String message, String orgNumber, String erpSystem) {
+    public void sendEmail(String message) {
 
         SendEmailRequest sesRequest = new SendEmailRequest()
                 .withDestination(getEmailDestination())
-                .withMessage(getMessageBodyWithHtml(message, orgNumber, erpSystem))
+                .withMessage(getMessageBodyWithHtml(message))
                 .withSource(emailConfig.getFrom());
 
         try {
             emailClient.sendEmail(sesRequest);
+            log.info("email sent");
         } catch (AmazonSimpleEmailServiceException ex) {
             log.error("exception while sending message with error={}", ex.getMessage());
         }
@@ -55,7 +56,7 @@ public class EmailService {
         return destination;
     }
 
-    private Message getMessageBodyWithHtml(String input, String orgNumber, String erpSystem) {
+    private Message getMessageBodyWithHtml(String input) {
         Body body = new Body()
                 .withHtml(new Content().withCharset(StandardCharsets.UTF_8.displayName()).withData(input));
 
@@ -63,7 +64,7 @@ public class EmailService {
                 .withBody(body)
                 .withSubject(
                         new Content().withCharset(StandardCharsets.UTF_8.displayName())
-                                .withData(emailConfig.getSubject().formatted(erpSystem, orgNumber)));
+                                .withData(emailConfig.getSubject()));
     }
 
 }

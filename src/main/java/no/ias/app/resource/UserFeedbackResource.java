@@ -51,12 +51,23 @@ public class UserFeedbackResource {
 
     @Get(produces = MediaType.APPLICATION_JSON)
     @Operation(summary = "get customer feedback",
-            description = "process request and email feedback stats")
+            description = "process request and gets list of feedback")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     @Tag(name = "Feedback")
-    public Mono<HttpResponse<List<FeedbackData>>> getCustomerFeedbackStats(@Header UUID traceId) {
+    public Mono<HttpResponse<List<FeedbackData>>> getCustomerFeedbacks(@Header UUID traceId) {
         log.info("request received for traceId={}", traceId);
 
         return Mono.just(HttpResponse.ok(userFeedbackService.getCustomerFeedback()));
+    }
+
+    @Get(produces = MediaType.APPLICATION_JSON,value = "/internal/email")
+    @Operation(summary = "get customer feedback",
+            description = "process request and email feedback stats")
+    @ApiResponse(responseCode = "500", description = "Internal server error")
+    @Tag(name = "Feedback")
+    public Mono<HttpResponse<String>> getCustomerFeedbackStats(@Header UUID traceId) {
+        log.info("request received for traceId={}", traceId);
+        userFeedbackService.sendFeedbackStatsViaEmail();
+        return Mono.just(HttpResponse.ok("mail sent"));
     }
 }
