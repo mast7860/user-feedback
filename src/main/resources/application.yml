@@ -1,0 +1,105 @@
+micronaut:
+  application:
+    name: userFeedback
+
+  server:
+    port: 8188
+    cors:
+      enabled: true
+
+  ssl:
+    enabled: false
+    buildSelfSigned: false
+    port: 8188
+
+  http:
+    client:
+      read-timeout: 30s
+      pool:
+        enabled: true
+
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
+
+  jms:
+    sqs:
+      enabled: true
+
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
+
+---
+aws:
+  region: ${AWS_DEFAULT_REGION:eu-west-1}
+  local-endpoint: ${AWS_LOCAL_HOST:`http://localhost:4566`}
+
+---
+ses:
+  email:
+    subject: ${SES_EMAIL_SUBJECT:`Feedback stats`}
+    from: ${SES_FROM_EMAIL_ID:`john.doe.one@unknown.com`}
+    to: ${SES_TO_EMAIL_TO:`john.doe.two@unknown.com`}
+
+---
+sqs:
+  queue:
+    url: ${SQS_QUEUE_URL:`http://localhost:4566/000000000000/feedback-sqs`}
+    name: ${SQS_QUEUE_NAME:`feedback-sqs`}
+    threads: ${SQS_LISTENER_THREADS:`1-5`}
+
+---
+slack:
+  endpoint: ${SLACK_WEBHOOK_URL:`https://hooks.slack.com/services/XXXX/XXXX/XXXX`}
+
+---
+jackson:
+  serialization:
+    writeDatesAsTimestamps: false
+
+---
+endpoints:
+  all:
+    path: /management
+  beans:
+    enabled: true
+    sensitive: false
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+  info:
+    enabled: true
+    sensitive: false
+  refresh:
+    enabled: true
+    sensitive: false
+  routes:
+    enabled: true
+    sensitive: false
+  loggers:
+    enabled: true
+    sensitive: false
+    write-sensitive: false
+  caches:
+    enabled: true
+    sensitive: false
+  env:
+    enabled: true
+    sensitive: false
+  threaddump:
+    enabled: true
+    sensitive: false
+  prometheus:
+    enabled: true
+    sensitive: false

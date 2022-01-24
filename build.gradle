@@ -1,0 +1,61 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.1"
+    id("io.micronaut.application") version "3.1.1"
+}
+
+version = "0.1"
+group = "no.ias.app"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("no.ias.app.*")
+    }
+}
+
+dependencies {
+    annotationProcessor("org.projectlombok:lombok")
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    implementation("io.micronaut:micronaut-inject-java")
+
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-management")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
+    implementation("io.micronaut.jms:micronaut-jms-sqs")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-core")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+    implementation("io.micronaut.reactor:micronaut-reactor")
+    implementation("io.micronaut.reactor:micronaut-reactor-http-client")
+    implementation("io.swagger.core.v3:swagger-annotations")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    implementation("io.micronaut:micronaut-validation")
+    implementation 'com.slack.api:bolt:1.17.0'
+    implementation "com.amazonaws:aws-java-sdk-ses"
+    implementation("com.amazonaws:aws-java-sdk-dynamodb")
+
+    compileOnly("org.projectlombok:lombok")
+    runtimeOnly('ch.qos.logback:logback-classic:1.2.10')
+
+    testImplementation("org.assertj:assertj-core")
+    testImplementation("org.mockito:mockito-core")
+
+}
+
+
+application {
+    mainClass.set("no.ias.app.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+graalvmNative.toolchainDetection = false

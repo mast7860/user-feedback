@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: no.ias.app
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [annotation-api, app-name, assertj, aws-v2-sdk, gradle, http-client, java, java-application, jms-sqs, junit, logback, lombok, management, micrometer, micrometer-prometheus, micronaut-build, mockito, netty-server, openapi, reactor, reactor-http-client, readme, shade, yaml]
